@@ -37,8 +37,8 @@ test.describe('Homepage', () => {
   })
 
   test('HP-004 - Verify featured games section - Featured games visible', async({page}) => {
-    const gameVisibility = await homePage.featuredGamesVisible()
-    expect(gameVisibility).toBeTruthy()
+    const gameCount = await homePage.featuredGamesVisible()
+    expect(gameCount).toBeGreaterThan(0)
   })
 
   test('HP-004 - Verify featured games section - Featured games clickable', async({page}) => {
