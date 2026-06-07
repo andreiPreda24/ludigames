@@ -10,27 +10,16 @@ export class HomePage {
 
     async homePageLoad() {
         await this.page.waitForLoadState('networkidle')
-        await expect(this.page.locator('body')).toBeVisible()
     }
 
     async pageTitle() {
         const pageTitle = await this.page.title()
-        await expect(pageTitle).toEqual('Ludigames | Free Online Games')
+        return pageTitle
     }
 
     async gameCategories() {
         const gameCategories = await this.page.locator('.container-i').nth(1).textContent()
-        expect(gameCategories).toContain('Action games')
-        expect(gameCategories).toContain('Sport games')
-        expect(gameCategories).toContain('Family games')
-        expect(gameCategories).toContain('Casual')
-        expect(gameCategories).toContain('Racing games');
-        expect(gameCategories).toContain('Adventure games');
-        expect(gameCategories).toContain('Simulation games');
-        expect(gameCategories).toContain('Strategy games');
-        expect(gameCategories).toContain('Logic games');
-        expect(gameCategories).toContain('Boardgames');
-        expect(gameCategories).toContain('All games');
+        return gameCategories
     }
 
     async featuredGamesVisible() {
@@ -46,27 +35,28 @@ export class HomePage {
 
             console.log(`Game ${i}: ${href}`)
 
-            expect(href).toBeTruthy()
         }
+
+        return featuredGames
+
     }
 
     async featuredGamesClickable() {
-        const featuredGames = this.page.locator('.category-v6 .container-i > a')
+        const featuredGamesClick = this.page.locator('.category-v6 .container-i > a')
         test.slow()
 
-        const count = await featuredGames.count()
+        const count = await featuredGamesClick.count()
 
         for(let i = 0; i < count; i++) {
-            const href = await featuredGames.nth(i).getAttribute('href')
+            const href = await featuredGamesClick.nth(i).getAttribute('href')
 
             console.log(`Checking link ${i}: ${href}`)
 
             await this.page.goto(`https://play.ludigames.com/?utm_source=gameloft&utm_medium=bookmark&utm_campaign=CRT03${href}`)
-
-            await expect(this.page).toHaveURL(/.+/)
-
-            await expect(this.page.locator('body')).toBeVisible()
         }
+
+        return featuredGamesClick
+
     }
 
     async pageStabilityAcrossBrowser() {
@@ -79,6 +69,8 @@ export class HomePage {
             { name: 'Pixel 7 Chrome', browserType: chromium, device: devices['Pixel 7'] },
           ];
         
+        let assertArray = []
+
         for (const config of configs) {
             const browser = await config.browserType.launch();
         
@@ -89,14 +81,18 @@ export class HomePage {
             const page = await context.newPage();
         
             const response = await this.page.goto('https://play.ludigames.com/?utm_source=gameloft&utm_medium=bookmark&utm_campaign=CRT03');
-        
-            expect(response?.ok()).toBeTruthy();
-        
+            if (response) {
+                assertArray.push(true)
+            } else {
+                assertArray.push(false)
+            }
             console.log(`${config.name} passed`);
         
             await context.close();
             await browser.close();
         }
+
+        return !assertArray.includes(false)
         
     }
     

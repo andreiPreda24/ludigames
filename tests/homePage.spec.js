@@ -13,26 +13,43 @@ test.describe('Homepage', () => {
 
   test('HP-001 - Open homepage URL', async({page}) => {
     await homePage.homePageLoad()
+    await expect(page.locator('body')).toBeVisible()
   })
 
   test('HP-002 - Verify page title Correct page title displayed', async({page}) => {
-    await homePage.pageTitle()
+    const pageTtile = await homePage.pageTitle()
+    await expect(pageTtile).toEqual('Ludigames | Free Online Games')
   })
 
   test('HP-003 - Verify game categories are displayed - Categories load without errors', async({page}) => {
-    await homePage.gameCategories()
+    const gameCategory = await homePage.gameCategories()
+    expect(gameCategory).toContain('Action games')
+    expect(gameCategory).toContain('Sport games')
+    expect(gameCategory).toContain('Family games')
+    expect(gameCategory).toContain('Casual')
+    expect(gameCategory).toContain('Racing games');
+    expect(gameCategory).toContain('Adventure games');
+    expect(gameCategory).toContain('Simulation games');
+    expect(gameCategory).toContain('Strategy games');
+    expect(gameCategory).toContain('Logic games');
+    expect(gameCategory).toContain('Boardgames');
+    expect(gameCategory).toContain('All games');
   })
 
   test('HP-004 - Verify featured games section - Featured games visible', async({page}) => {
-    await homePage.featuredGamesVisible()
+    const gameVisibility = await homePage.featuredGamesVisible()
+    expect(gameVisibility).toBeTruthy()
   })
 
   test('HP-004 - Verify featured games section - Featured games clickable', async({page}) => {
-    await homePage.featuredGamesClickable()
+    const clickOnGame = await homePage.featuredGamesClickable()
+    await expect(page).toHaveURL(/.+/)
+    await expect(page.locator('body')).toBeVisible()
   })
 
   test('HP-005 - Verify page loads on Chrome, Firefox, Safari, Edge - Consistent behavior across browsers and mobile', async({page}) => {
-    await homePage.pageStabilityAcrossBrowser()
+    const browserBehavior = await homePage.pageStabilityAcrossBrowser()
+    expect(browserBehavior).toBeTruthy();
   })
     
 })

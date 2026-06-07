@@ -12,7 +12,8 @@ test.beforeEach(async({page}) => {
 
 test.describe('Games', () => {
 
-    test.only('GL-001 - Launch a game from homepage - Game starts successfully', async({page}) => {
+    test('GL-001 - Launch a game from homepage - Game starts successfully', async({page}) => {
         await games.launch()
+        await expect(page.locator('#game-frame')).toBeVisible()
     })
 })
