@@ -80,7 +80,7 @@ export class HomePage {
         
             const page = await context.newPage();
         
-            const response = await this.page.goto('https://play.ludigames.com/?utm_source=gameloft&utm_medium=bookmark&utm_campaign=CRT03');
+            const response = await page.goto('https://play.ludigames.com/?utm_source=gameloft&utm_medium=bookmark&utm_campaign=CRT03');
             if (response) {
                 assertArray.push(true)
             } else {
