@@ -23,22 +23,14 @@ export class HomePage {
     }
 
     async featuredGamesVisible() {
+        
         const featuredGames = this.page.locator('.category-v6 .container-i > a')
-    
         const count = await featuredGames.count()
-
         for(let i = 0; i < count; i++) {
-
-            const game = featuredGames.nth(i)
-      
-            const href = await game.getAttribute('href')
-
-            console.log(`Game ${i}: ${href}`)
-
+            const href = await featuredGames.nth(i).getAttribute('href')
+            console.log(`Game ${i} ${href}`)
         }
-
-        return featuredGames
-
+        return count
     }
 
     async featuredGamesClickable() {
@@ -46,16 +38,17 @@ export class HomePage {
         test.slow()
 
         const count = await featuredGamesClick.count()
+        console.log(featuredGamesClick)
 
-        for(let i = 0; i < count; i++) {
-            const href = await featuredGamesClick.nth(i).getAttribute('href')
-
-            console.log(`Checking link ${i}: ${href}`)
-
-            await this.page.goto(`https://play.ludigames.com/?utm_source=gameloft&utm_medium=bookmark&utm_campaign=CRT03${href}`)
+        const hrefs = []
+        for (let i = 0; i < count; i++) {
+            hrefs.push(await featuredGamesClick.nth(i).getAttribute('href'))
         }
 
-        return featuredGamesClick
+        for (const href of hrefs) {
+            await this.page.goto(href)
+            await this.page.locator('#game-frame').contentFrame().locator('iframe[title="3rd party ad content"]').contentFrame().getByRole('button', { name: 'Close ad' }).click()
+        }
 
     }
 
